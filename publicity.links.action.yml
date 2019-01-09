@@ -1,0 +1,6 @@
+entity.publicity_entity.add_form:
+  route_name: entity.publicity_entity.add_form
+  title: 'Add Publicity entity'
+  appears_on:
+    - entity.publicity_entity.collection
+

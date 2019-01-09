@@ -1,0 +1,14 @@
+{
+  "name": "drupal/publicity",
+  "type": "drupal-module",
+  "description": "this module works to create custom adds when you want",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/publicity",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/publicity",
+    "source": "http://cgit.drupalcode.org/publicity"
+  },
+  "require": { }
+}

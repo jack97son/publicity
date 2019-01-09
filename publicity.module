@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains publicity.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function publicity_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the publicity module.
+    case 'help.page.publicity':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('this module works to create custom adds when you want') . '</p>';
+      return $output;
+
+    default:
+  }
+}

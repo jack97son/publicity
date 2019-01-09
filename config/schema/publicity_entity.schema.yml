@@ -1,0 +1,15 @@
+publicity.publicity_entity.*:
+  type: config_entity
+  label: 'Publicity entity config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+    url_pu:
+      type: string
+      label: 'url_pu'

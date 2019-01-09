@@ -1,0 +1,9 @@
+
+# Publicity entity menu items definition
+entity.publicity_entity.collection:
+  title: 'Publicity entity'
+  route_name: entity.publicity_entity.collection
+  description: 'List Publicity entity (bundles)'
+  parent: system.admin_structure
+  weight: 99
+
