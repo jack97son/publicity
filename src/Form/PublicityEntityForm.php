@@ -37,9 +37,9 @@ class PublicityEntityForm extends EntityForm {
     
     /* You will need additional form elements for your custom properties. */
 
-    $form['url_up'] = [
+    $form['url_pu'] = [
       '#type' => 'url',
-      '#default_value' => $publicity_entity->get('url_up'),
+      '#default_value' => $publicity_entity->get('url_pu'),
       '#title' => $this->t('Url publicity'),
       '#description' => $this->t("Url the publicity"),
     ];
@@ -51,24 +51,60 @@ class PublicityEntityForm extends EntityForm {
       '#description' => $this->t("Select your page"),
       '#options' => [
         '1' => 'Home page',
-        '2' => 'Sections',
-        '3' => 'Articles',
+        'Taxonomies' => $this->taxonomy_vocabulary_get_names(),
+        'Content types' => $this->content_type_get_names(),
       ],
-      '#empty_option' => 'content types',
+
     ];
 
-    $form['breakpoints'] = [
-      '#type' => 'fieldset',
-      '#title' => t('RENDERED'), 
+    $form['breakpoints_desktop'] = [
+      '#type' => 'details',
+      '#title' => t('Desktop'), 
     ];
 
-    $form['breakpoints']['height'] = [
+    $form['breakpoints_mobile'] = [
+      '#type' => 'details',
+      '#title' => t('Mobile'), 
+    ];
+
+    $form['breakpoints_tablet'] = [
+      '#type' => 'details',
+      '#title' => t('Tablet'), 
+    ];
+
+    $form['breakpoints_desktop']['height'] = [
       '#type' => 'number',
       '#title' => 'height',
       '#min' => 1,
     ];
 
-    $form['breakpoints']['width'] = [
+    $form['breakpoints_mobile']['height'] = [
+      '#type' => 'number',
+      '#title' => 'height',
+      '#min' => 1,
+    ];
+
+    $form['breakpoints_tablet']['height'] = [
+      '#type' => 'number',
+      '#title' => 'height',
+      '#min' => 1,
+    ];
+
+    $form['breakpoints_desktop']['width'] = [
+      '#type' => 'number',
+      '#title' => 'width',
+      '#min' => 1,
+      '#default_value' => $publicity_entity->get('width'),
+    ];
+
+    $form['breakpoints_mobile']['width'] = [
+      '#type' => 'number',
+      '#title' => 'width',
+      '#min' => 1,
+      '#default_value' => $publicity_entity->get('width'),
+    ];
+
+    $form['breakpoints_tablet']['width'] = [
       '#type' => 'number',
       '#title' => 'width',
       '#min' => 1,
@@ -100,4 +136,34 @@ class PublicityEntityForm extends EntityForm {
     $form_state->setRedirectUrl($publicity_entity->toUrl('collection'));
   }
 
+  public function taxonomy_vocabulary_get_names() {
+    $names =& drupal_static(__FUNCTION__);
+    if (!isset($names)) {
+      $names = [];
+      $config_names = \Drupal::configFactory()
+        ->listAll('taxonomy_vocabulary.');
+      foreach ($config_names as $config_name) {
+        $id = substr($config_name, strlen('taxonomy_vocabulary.'));
+        $names[$id] = $id;
+      }
+    }
+    return $names;
+  }
+
+  public function content_type_get_names() {
+    $names =& drupal_static(__FUNCTION__);
+    if (!isset($names)) {
+      $names = [];
+      $config_names = \Drupal::configFactory()
+        ->listAll('node_type.');
+      foreach ($config_names as $config_name) {
+        $id = substr($config_name, strlen('node_type.'));
+        $names[$id] = $id;
+      }
+    }
+    return $names;
+  }
+      
 }
+
+// $vocabulary = entity_load('taxonomy_vocabulary', 'MACHINE_NAME')->label();

@@ -13,3 +13,6 @@ publicity.publicity_entity.*:
     url_pu:
       type: string
       label: 'url_pu'
+    render:
+      type: string
+      label: 'render'  

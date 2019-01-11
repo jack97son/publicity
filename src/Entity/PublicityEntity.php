@@ -27,7 +27,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
- *     "uuid" = "uuid"
+ *     "uuid" = "uuid",
+ *     "label" = "name"
  *   },
  *   links = {
  *     "canonical" = "/admin/structure/publicity_entity/{publicity_entity}",
@@ -35,7 +36,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "edit-form" = "/admin/structure/publicity_entity/{publicity_entity}/edit",
  *     "delete-form" = "/admin/structure/publicity_entity/{publicity_entity}/delete",
  *     "collection" = "/admin/structure/publicity_entity"
- *   }
+ *   },
+ *
  * )
  */
 class PublicityEntity extends ConfigEntityBase implements PublicityEntityInterface {
