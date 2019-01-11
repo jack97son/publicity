@@ -10,9 +10,9 @@ publicity.publicity_entity.*:
       label: 'Label'
     uuid:
       type: string
-    url_pu:
+    urlpu:
       type: string
-      label: 'url_pu'
+      label: 'UrlPu'
     render:
       type: string
       label: 'render'  

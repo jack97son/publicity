@@ -4,11 +4,14 @@ namespace Drupal\publicity\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\core\modules\taxonomy\src\Entity\Vocabulary;
 
 /**
  * Class PublicityEntityForm.
  */
 class PublicityEntityForm extends EntityForm {
+
+  protected $name;
 
   /**
    * {@inheritdoc}
@@ -37,12 +40,21 @@ class PublicityEntityForm extends EntityForm {
     
     /* You will need additional form elements for your custom properties. */
 
-    $form['url_pu'] = [
+    $form[] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Identificator'),
+      '#description' => $this->t("ID the publicity"),
+      '#placeholder' => '8c4...'
+
+    ];
+
+    $form['UrlPu'] = [
       '#type' => 'url',
-      '#default_value' => $publicity_entity->get('url_pu'),
+      '#default_value' => $publicity_entity->getUrlPu(),
       '#title' => $this->t('Url publicity'),
       '#description' => $this->t("Url the publicity"),
-    ];
+      '#placeholder' => 'https://'
+    ];  
 
     $form['render'] = [
       '#type' => 'select',
@@ -141,10 +153,10 @@ class PublicityEntityForm extends EntityForm {
     if (!isset($names)) {
       $names = [];
       $config_names = \Drupal::configFactory()
-        ->listAll('taxonomy_vocabulary.');
+        ->listAll('taxonomy.vocabulary.');
       foreach ($config_names as $config_name) {
-        $id = substr($config_name, strlen('taxonomy_vocabulary.'));
-        $names[$id] = $id;
+        $id = substr($config_name, strlen('taxonomy.vocabulary.'));
+        $names[$id] = entity_load('taxonomy_vocabulary', $id)->label();
       }
     }
     return $names;
@@ -158,7 +170,8 @@ class PublicityEntityForm extends EntityForm {
         ->listAll('node_type.');
       foreach ($config_names as $config_name) {
         $id = substr($config_name, strlen('node_type.'));
-        $names[$id] = $id;
+        $names[$id] = strtolower(entity_load('node_type', $id)->label());
+        
       }
     }
     return $names;
