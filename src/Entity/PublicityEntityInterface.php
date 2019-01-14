@@ -25,4 +25,36 @@ interface PublicityEntityInterface extends ConfigEntityInterface {
    */
   public function setUrlPu(string $UrlPu);
 
+  /**
+   * Get the default place to put an AD.
+   *
+   * @return string
+   */
+  public function getPlace();
+  /**
+   * Set the default place to put an AD.
+   *
+   * @param string $place
+   *   The place to set.
+   *
+   * @return string
+   */
+  public function setPlace($place);
+  /**
+   * Get the breakpoints.
+   *
+   * @return string
+   */
+  public function getBreakpoints();
+  
+  /**
+   * Set the default breakpoints.
+   *
+   * @param string $breakpoints
+   *   The breakpoints to set.
+   *
+   * @return string
+   */
+  public function setBreakpoints($breakpoints);
+  
 }

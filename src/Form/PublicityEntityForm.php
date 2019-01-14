@@ -24,7 +24,7 @@ class PublicityEntityForm extends EntityForm {
       '#type' => 'textfield',
       '#title' => $this->t('Name'),
       '#maxlength' => 255,
-      '#default_value' => $publicity_entity->label(),
+      '#default_value' => $publicity_entity->label,
       '#description' => $this->t("Name for the Publicity."),
       '#required' => TRUE,
     ];
@@ -69,68 +69,154 @@ class PublicityEntityForm extends EntityForm {
 
     ];
 
-    $form['breakpoints_desktop'] = [
-      '#type' => 'details',
-      '#title' => t('Desktop'), 
+    $form['breakpoints'] = [
+      '#type' => 'fieldset',
+      '#tree' => TRUE,
+      '#description' => '',
+      '#title' => $this->t('Breakpoints'),
+      '#prefix' => '<div id="breakpoint-wrapper">',
+      '#suffix' => '</div>',
     ];
 
-    $form['breakpoints_mobile'] = [
-      '#type' => 'details',
-      '#title' => t('Mobile'), 
+    $width = $publicity_entity->getBreakpoints();
+    if(!empty($width)) {
+      $form_state->set('field_deltas', range(0,count($width['form']) - 1));
+    }
+    if ($form_state->get('field_deltas') == '') {
+      $form_state->set('field_deltas', range(0,1));
+    }
+    
+    $field_count = $form_state->get('field_deltas');
+    $names_options = ['- Desktop', '- Tablet', '- Mobile', '- Other'];
+  
+    foreach ($field_count as $delta) {
+      $form['breakpoints']['form'][$delta] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('Options ' . $names_options[$delta]),
+        '#tree' => TRUE,
+      ];
+  
+      $form['breakpoints']['form'][$delta]['width'] = [
+        '#type' => 'number',
+        '#title' => 'Width', 
+        '#min' => 1,
+        '#required' => TRUE,
+        '#default_value' => $width['form'][$delta]['width'],
+        '#description' => $this->t('The width in px.'),
+      ];
+  
+      $form['breakpoints']['form'][$delta]['height'] = [
+        '#type' => 'number',
+        '#title' => 'height', 
+        '#min' => 1,
+        '#required' => TRUE,
+        '#default_value' => $width['form'][$delta]['height'],
+        '#description' => $this->t('The height in px.'),
+      ];
+  
+      $form['breakpoints']['form'][$delta]['remove'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Remove'),
+        '#submit' => ['::addMoreRemove'],
+        '#ajax' => [
+          'callback' => '::addMoreRemoveCallback',
+          'wrapper' => 'breakpoint-wrapper',
+        ],
+        '#name' => 'remove_name_' . $delta,
+      ];
+    }
+    $form['breakpoints']['add'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Add'),
+      '#submit' => ['::AddMoreAddOne'],
+      '#ajax' => [
+        'callback' => '::AddMoreAddOneCallback',
+        'wrapper' => 'breakpoint-wrapper',
+      ],
     ];
-
-    $form['breakpoints_tablet'] = [
-      '#type' => 'details',
-      '#title' => t('Tablet'), 
-    ];
-
-    $form['breakpoints_desktop']['height'] = [
-      '#type' => 'number',
-      '#title' => 'height',
-      '#min' => 1,
-    ];
-
-    $form['breakpoints_mobile']['height'] = [
-      '#type' => 'number',
-      '#title' => 'height',
-      '#min' => 1,
-    ];
-
-    $form['breakpoints_tablet']['height'] = [
-      '#type' => 'number',
-      '#title' => 'height',
-      '#min' => 1,
-    ];
-
-    $form['breakpoints_desktop']['width'] = [
-      '#type' => 'number',
-      '#title' => 'width',
-      '#min' => 1,
-      '#default_value' => $publicity_entity->get('width'),
-    ];
-
-    $form['breakpoints_mobile']['width'] = [
-      '#type' => 'number',
-      '#title' => 'width',
-      '#min' => 1,
-      '#default_value' => $publicity_entity->get('width'),
-    ];
-
-    $form['breakpoints_tablet']['width'] = [
-      '#type' => 'number',
-      '#title' => 'width',
-      '#min' => 1,
-      '#default_value' => $publicity_entity->get('width'),
-    ];
-
     return $form;
   }
+  /**
+   * function to add one field of breakpoint.
+   * 
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+	public function addMoreRemove(array &$form, FormStateInterface $form_state) {
+		// Get the triggering item
+    $delta_remove = $form_state->getTriggeringElement()['#parents'][2];
+    
+    // Store our form state
+    $field_deltas_array = $form_state->get('field_deltas');
+    
+    // Find the key of the item we need to remove
+    $key_to_remove = array_search($delta_remove, $field_deltas_array);
+    
+    // Remove our triggered element
+    unset($field_deltas_array[$key_to_remove]);
+    
+    // Rebuild the field deltas values
+    $form_state->set('field_deltas', $field_deltas_array);
+    
+    // Rebuild the form
+    $form_state->setRebuild();
+    return $this->messenger()->addMessage($this->t('The BreakPoint has been remove'), 'warning');
+	}
+  /**
+   * ajax callback to add the new field to the render form.
+   * 
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return mixed
+   */
+  public function addMoreRemoveCallback(array &$form, FormStateInterface $form_state) {
+		return $form['breakpoints'];
+	}
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+	public function AddMoreAddOne(array &$form, FormStateInterface $form_state) {
+    // Store our form state
+    $field_deltas_array = $form_state->get('field_deltas');
+    
+    // check to see if there is more than one item in our array
+    if (count($field_deltas_array) > 0) {
+      // Add a new element to our array and set it to our highest value plus one
+      $field_deltas_array[] = max($field_deltas_array) + 1;
+    }
+    else {
+      // Set the new array element to 0
+      $field_deltas_array[] = 0;
+    }
+  
+    // Rebuild the field deltas values
+    $form_state->set('field_deltas', $field_deltas_array);
+  
+    // Rebuild the form
+    $form_state->setRebuild();
+    
+  }
+  
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return mixed
+   */
+  function AddMoreAddOneCallback(array &$form, FormStateInterface $form_state) {
+    return $form['breakpoints'];
+  }  
+
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
     $publicity_entity = $this->entity;
+    $value_breakpoints= $form_state->getValue('breakpoints', 'form');
+    $publicity_entity->setBreakpoints($value_breakpoints);
     $status = $publicity_entity->save();
 
     switch ($status) {
@@ -156,7 +242,7 @@ class PublicityEntityForm extends EntityForm {
         ->listAll('taxonomy.vocabulary.');
       foreach ($config_names as $config_name) {
         $id = substr($config_name, strlen('taxonomy.vocabulary.'));
-        $names[$id] = entity_load('taxonomy_vocabulary', $id)->label();
+        $names[$id] = strtolower(entity_load('taxonomy_vocabulary', $id)->label());
       }
     }
     return $names;

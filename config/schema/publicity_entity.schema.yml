@@ -15,4 +15,7 @@ publicity.publicity_entity.*:
       label: 'UrlPu'
     render:
       type: string
-      label: 'render'  
+      label: 'render' 
+    breakpoints:
+      type: string
+      label: 'breakpoints'   

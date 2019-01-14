@@ -54,7 +54,7 @@ class PublicityEntity extends ConfigEntityBase implements PublicityEntityInterfa
    *
    * @var string
    */
-  protected $label;
+  public $label;
 
   /**
    * The Publicity entity url.
@@ -62,6 +62,54 @@ class PublicityEntity extends ConfigEntityBase implements PublicityEntityInterfa
    * @var string
    */
   protected $UrlPu;
+
+  /**
+   * The Advertising entity breakpoints.
+   *
+   * @var array
+   */
+  public $breakpoints;
+   /**
+   * Set the default place to put an AD.
+   *
+   * @param string $place
+   *   The place to set.
+   *
+   * @return string
+   */
+  public function setPlace($place) {
+    return $this->set('place', $place);
+  }
+  /**
+   * Get the default place to put an AD.
+   *
+   * @return string
+   */
+  public function getPlace() {
+    return $this->get('place');
+  }
+  /**
+   * Set the default breakpoints.
+   *
+   * @param string $breakpoints
+   *   The breakpoints to set.
+   *
+   * @return string
+   */
+  public function setBreakpoints($breakpoints) {
+    $serializer = \Drupal::service('serialization.phpserialize');
+    $this->breakpoints = $serializer->encode($breakpoints);
+  }
+  /**
+   * Get the breakpoints.
+   *
+   * @return string
+   */
+  public function getBreakpoints() {
+    $serializer = \Drupal::service('serialization.phpserialize');
+    return $serializer->decode($this->breakpoints);
+  }
+
 
 
   /**
