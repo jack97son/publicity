@@ -1,10 +1,29 @@
 <?php
 
-// function publicity_alter_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
- 
-//   // dpm($form_id);
-//   ksm($form);
+// /**
+// //  * alterar_formulario_form_alter
+// //  *
+// //  * @param  mixed $form
+// //  * @param  mixed $form_state
+// //  * @param  mixed $form_id
+// //  *
+// //  * @return void
+// //  */
+// // function alterar_formulario_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  
+// //   // dpm($form);
+// //   ksm($form);
+  
+  
+// //   // switch ($form_id) {
 
-//   $form['#actions'][''];
-
-// }
+// //   //   case 'taxonomy_vocabulary_confirm_delete':
+// //   //   // case 'node_type_delete_form':
+  
+// //   //     if ($form['actions']['submit']['#disabled'] = true) {
+// //   //       \Drupal::messenger()->addMessage(t("<strong>You can not delete this vocabulary because it is in use!</strong>"), 'error');
+// //   //     }
+// //   //   break; 
+// //   // }  
+  
+// // }
